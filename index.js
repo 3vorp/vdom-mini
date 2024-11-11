@@ -1,4 +1,4 @@
-(function () {
+;!function () {
 	/**
 	 * Wrap a value in a state-tracking reactive node
 	 * @param {any} val - Value to track/wrap
@@ -164,7 +164,7 @@
 		$data = {};
 		/** @type {Record<string, () => any} */
 		$watchers = {};
-		/** @type {(h: typeof createElement) => object} */
+		/** @type {() => VNode} */
 		$view;
 		/** @type {() => void} */
 		onMount;
@@ -192,8 +192,8 @@
 		}) {
 			if (el) this.$el = document.querySelector(el);
 			this._setupData({ state, data, computed, methods, watch });
+			this.$view = view.bind(this.$data, createElement);
 			if (created) created.call(this.$data);
-			this.$view = view;
 			this.onMount = (mounted || function () {}).bind(this.$data);
 			this.onUpdate = (updated || function () {}).bind(this.$data);
 		}
@@ -213,12 +213,11 @@
 			}
 
 			if (watch) this.$watchers = watch;
-
 			for (const k of Object.keys(this.$data).filter((k) => this.$data[k].type === "state")) {
 				this.$data[k]._emit = () => {
 					// diff nodes and apply changes
 					const prevNodes = this._vNodeCache;
-					this._vNodeCache = this.$view.call(this.$data, createElement);
+					this._vNodeCache = this.$view();
 					return rerender(this.$el.firstChild, prevNodes, this._vNodeCache, this).then(
 						() => {
 							this.onUpdate();
@@ -237,13 +236,14 @@
 		mount(sel) {
 			this.$el ||= document.querySelector(sel);
 			if (!this.$el) throw new Error("Selector not found");
-			this._vNodeCache = this.$view.call(this.$data, createElement);
+			this._vNodeCache = this.$view();
 			this.$el.replaceChildren(render(this._vNodeCache, this.$data));
 			this.isMounted = true;
 			this.onMount();
 			return this;
 		}
 	}
+
 	window.VirtualDOM = VirtualDOM;
 	window.reactive = reactive;
-})();
+}();
