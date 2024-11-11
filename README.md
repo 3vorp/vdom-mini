@@ -1,25 +1,25 @@
 <div align="center">
-	<h1>vDOM Mini</h1>
-	<a href="https://www.npmjs.com/package/vdom-mini" target="_blank">
-		<img
-			alt="npm"
-			src="https://img.shields.io/npm/v/vdom-mini?color=cb0000&logo=npm&style=flat-square"
-		>
-	</a>
-	<a href="https://github.com/3vorp/vdom-mini">
-		<img
-			alt="GitHub file size in bytes"
-			src="https://img.shields.io/github/size/3vorp/vdom-mini/index.js?color=43A047&label=Script%20size&logoColor=green&style=flat-square"
-		>
-	</a>
-	<a href="https://github.com/3vorp/vdom-mini/blob/main/CHANGELOG.md">
-		<img
-			alt="Changelog"
-			src="https://img.shields.io/badge/Changelog-Read_Here-blue?style=flat-square"
-		>
-	</a>
-	<br>
-	<i>Like an iPad Mini, but instead of a tablet, it's a 250-line virtual DOM implementation from scratch.</i>
+  <h1>vDOM Mini</h1>
+  <a href="https://www.npmjs.com/package/vdom-mini" target="_blank">
+    <img
+      alt="npm"
+      src="https://img.shields.io/npm/v/vdom-mini?color=cb0000&logo=npm&style=flat-square"
+    >
+  </a>
+  <a href="https://github.com/3vorp/vdom-mini">
+    <img
+      alt="GitHub file size in bytes"
+      src="https://img.shields.io/github/size/3vorp/vdom-mini/index.js?color=43A047&label=Script%20size&logoColor=green&style=flat-square"
+    >
+  </a>
+  <a href="https://github.com/3vorp/vdom-mini/blob/main/CHANGELOG.md">
+    <img
+      alt="Changelog"
+      src="https://img.shields.io/badge/Changelog-Read_Here-blue?style=flat-square"
+    >
+  </a>
+  <br>
+  <i>Like an iPad Mini, but instead of a tablet, it's a 250-line virtual DOM implementation from scratch.</i>
 </div>
 
 ## Setup
@@ -40,10 +40,10 @@ Now you can reference this element when creating a new Virtual DOM instance:
 
 ```js
 const app = new VirtualDOM({
-	el: "#app",
-	view(h) {
-		return h("h1", null, "Hello from the virtual DOM!");
-	},
+  el: "#app",
+  view(h) {
+    return h("h1", null, "Hello from the virtual DOM!");
+  },
 });
 // mount the app to the selector specified in the options object
 // you can also provide a different selector as the first parameter
@@ -56,14 +56,14 @@ Templates are written using a React-like createElement function (called `h` for 
 
 ```js
 const app = new VirtualDOM({
-	view(h) {
-		// only the first argument is required
-		// children can be any combination of strings and other function calls
-		return h("div", { class: "container" }, [
-			h("h1", { id: "title" }, "This is a title"),
-			h("p", null, "This is text"),
-		]);
-	},
+  view(h) {
+    // only the first argument is required
+    // children can be any combination of strings and other function calls
+    return h("div", { class: "container" }, [
+      h("h1", { id: "title" }, "This is a title"),
+      h("p", null, "This is text"),
+    ]);
+  },
 });
 // the function argument takes priority if both are specified
 app.mount("#app");
@@ -75,15 +75,15 @@ You can add state to your app using the `state()` method, which will be run befo
 
 ```js
 new VirtualDOM({
-	state($) {
-		const title = $("This is a title");
-		return { title };
-	},
-	// all data returned from state is available here using this
-	view(h) {
-		// data is retrieved using the value getter on each returned reactive object
-		return h("h1", null, this.title.value);
-	},
+  state($) {
+    const title = $("This is a title");
+    return { title };
+  },
+  // all data returned from state is available here using this
+  view(h) {
+    // data is retrieved using the value getter on each returned reactive object
+    return h("h1", null, this.title.value);
+  },
 });
 ```
 
@@ -91,37 +91,37 @@ Derived state is returned from the same state hook, along with any functions:
 
 ```js
 new VirtualDOM({
-	state($) {
-		const title = $("This is a title");
-		// functions inside the reactivity factory function are interpreted as derived state
-		const screamingTitle = $(() => title.value.toUpperCase());
-		// functions are declared as normal
-		function updateTitle() {
-			title.value = "Another title";
-		}
-		// everything is returned at the end
-		return { title, screamingTitle, updateTitle };
-	},
-	// now, all state, derived values, and functions can be accessed through this
-	view(h) {
-		return h("div", { class: "container" }, [
-			h("h1", null, this.screamingTitle.value),
-			// event listeners are cased as myevent -> onMyevent
-			h(
-				"button",
-				{
-					onClick: () => updateTitle(),
-				},
-				"Click to update title",
-			),
-			this.title.value === "This is a title" &&
-				h(
-					"p",
-					null,
-					"Conditionally render children using the && operator",
-				),
-		]);
-	},
+  state($) {
+    const title = $("This is a title");
+    // functions inside the reactivity factory function are interpreted as derived state
+    const screamingTitle = $(() => title.value.toUpperCase());
+    // functions are declared as normal
+    function updateTitle() {
+      title.value = "Another title";
+    }
+    // everything is returned at the end
+    return { title, screamingTitle, updateTitle };
+  },
+  // now, all state, derived values, and functions can be accessed through this
+  view(h) {
+    return h("div", { class: "container" }, [
+      h("h1", null, this.screamingTitle.value),
+      // event listeners are cased as myevent -> onMyevent
+      h(
+        "button",
+        {
+          onClick: () => updateTitle(),
+        },
+        "Click to update title",
+      ),
+      this.title.value === "This is a title" &&
+        h(
+          "p",
+          null,
+          "Conditionally render children using the && operator",
+        ),
+    ]);
+  },
 });
 ```
 
@@ -129,28 +129,28 @@ Effects are stored in a `watch` object.
 
 ```js
 new VirtualDOM({
-	state($) {
-		const title = $("my value");
-		return { title };
-	},
-	watch: {
-		title(newValue) {
-			// shows "Title was changed to another value! on button click"
-			alert(`Title was changed to ${newValue}!`);
-		},
-	},
-	view(h) {
-		return h("div", { class: "container" }, [
-			h("h1", null, this.title.value),
-			h("button",
-				{
-					onClick: () => {
-						this.title.value = "another value"
-					}
-				}
-			);
-		]);
-	},
+  state($) {
+    const title = $("my value");
+    return { title };
+  },
+  watch: {
+    title(newValue) {
+      // shows "Title was changed to another value! on button click"
+      alert(`Title was changed to ${newValue}!`);
+    },
+  },
+  view(h) {
+    return h("div", { class: "container" }, [
+      h("h1", null, this.title.value),
+      h("button",
+        {
+          onClick: () => {
+            this.title.value = "another value"
+          }
+        }
+      );
+    ]);
+  },
 });
 ```
 
@@ -158,26 +158,26 @@ A more Vue.js-like option-based API is available as well:
 
 ```js
 new VirtualDOM({
-	data() {
-		return {
-			title: "my value",
-		};
-	},
-	methods: {
-		updateTitle() {
-			// you still have to use .value for getters/setters
-			this.title.value = "another title";
-		},
-	},
-	computed: {
-		screamingTitle() {
-			return this.title.value.toUpperCase();
-		},
-	},
-	view(h) {
-		// all state is still available in this
-		return h("h1", null, this.screamingTitle.value);
-	},
+  data() {
+    return {
+      title: "my value",
+    };
+  },
+  methods: {
+    updateTitle() {
+      // you still have to use .value for getters/setters
+      this.title.value = "another title";
+    },
+  },
+  computed: {
+    screamingTitle() {
+      return this.title.value.toUpperCase();
+    },
+  },
+  view(h) {
+    // all state is still available in this
+    return h("h1", null, this.screamingTitle.value);
+  },
 });
 ```
 
@@ -187,18 +187,18 @@ Lifecycle hooks are available using a similar convention to Vue.js's lifecycle h
 
 ```js
 new VirtualDOM({
-	created() {
-		// this runs when state is initialized
-		// only state is available here
-	},
-	mounted() {
-		// this runs when the DOM has been mounted to the selector
-		// DOM methods like querySelector and getElementById are also available here
-	},
-	updated() {
-		// this runs after the DOM has been updated
-		// so DOM methods will point to the latest version
-	},
+  created() {
+    // this runs when state is initialized
+    // only state is available here
+  },
+  mounted() {
+    // this runs when the DOM has been mounted to the selector
+    // DOM methods like querySelector and getElementById are also available here
+  },
+  updated() {
+    // this runs after the DOM has been updated
+    // so DOM methods will point to the latest version
+  },
 });
 ```
 
@@ -211,24 +211,24 @@ The `$` function has two different operations depending on the type of the objec
 ```js
 // simplified state object
 ({
-	_emit() {},
-	_value: val,
-	get value() {
-		return this._value;
-	},
-	set value(nv) {
-		this._value = nv;
-		// this will be described more later
-		this._emit();
-	},
+  _emit() {},
+  _value: val,
+  get value() {
+    return this._value;
+  },
+  set value(nv) {
+    this._value = nv;
+    // this will be described more later
+    this._emit();
+  },
 });
 // simplified derived object
 ({
-	_fn: val,
-	get value() {
-		// ensure latest version is always received
-		return this._fn();
-	},
+  _fn: val,
+  get value() {
+    // ensure latest version is always received
+    return this._fn();
+  },
 });
 ```
 
@@ -240,9 +240,9 @@ The `h` function is simply syntactic sugar to easily build a tree of virtual DOM
 h("h1", { class: "heading" }, "This is some text");
 // returns
 ({
-	tag: "h1",
-	props: { class: "heading" },
-	children: ["This is some text"],
+  tag: "h1",
+  props: { class: "heading" },
+  children: ["This is some text"],
 });
 ```
 
@@ -257,15 +257,15 @@ The fundamental link between these two worlds comes through the `_emit` function
 ```js
 // state is stored as an object on the VirtualDOM instance called $data
 this.$data[k]._emit = () => {
-	// use cached result from the previous render to diff the changes
-	const prevNodes = this._vNodeCache;
-	// save new result to the now-outdated vnode cache for the next render
-	this._vNodeCache = this.$view(createElement);
-	// diff the outdated and rerendered nodes and apply changes to the actual DOM
-	rerender(this.$el, prevNodes, this._vNodeCache);
-	// handle watchers and lifecycle hooks
-	this.onUpdate();
-	this.$watchers[k].call(this.$data);
+  // use cached result from the previous render to diff the changes
+  const prevNodes = this._vNodeCache;
+  // save new result to the now-outdated vnode cache for the next render
+  this._vNodeCache = this.$view(createElement);
+  // diff the outdated and rerendered nodes and apply changes to the actual DOM
+  rerender(this.$el, prevNodes, this._vNodeCache);
+  // handle watchers and lifecycle hooks
+  this.onUpdate();
+  this.$watchers[k].call(this.$data);
 };
 ```
 
