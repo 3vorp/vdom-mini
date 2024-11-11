@@ -135,7 +135,7 @@ new VirtualDOM({
   },
   watch: {
     title(newValue) {
-      // shows "Title was changed to another value! on button click"
+      // shows "Title was changed to another value!" on button click
       alert(`Title was changed to ${newValue}!`);
     },
   },
@@ -209,7 +209,7 @@ Reactivity is implemented using ES5 getters and setters. When a value is set, it
 The `$` function has two different operations depending on the type of the object passed as the parameter. If the parameter is a regular value, the function returns a reactive object with both a getter and setter for `value`. However, if the parameter itself is a function, the function returns a getter-only object that calls the parameter when accessed. Since the function is polymorphic and therefore the only necessary import to declare all state variables, it's passed in the `state` function call directly to save on code.
 
 ```js
-// simplified state object
+// simplified state object representation
 ({
   _emit() {},
   _value: val,
@@ -222,7 +222,7 @@ The `$` function has two different operations depending on the type of the objec
     this._emit();
   },
 });
-// simplified derived object
+// simplified derived object representation
 ({
   _fn: val,
   get value() {
@@ -255,7 +255,7 @@ The `VirtualDOM` class combines these two different functions (`$` and `h`) into
 The fundamental link between these two worlds comes through the `_emit` function in a state object. This mysterious value is set when the `state` function gets called, with each state value having its emit function set to rerender the DOM when called.
 
 ```js
-// state is stored as an object on the VirtualDOM instance called $data
+// state is stored as a field on the VirtualDOM instance called $data
 this.$data[k]._emit = () => {
   // use cached result from the previous render to diff the changes
   const prevNodes = this._vNodeCache;
@@ -265,7 +265,7 @@ this.$data[k]._emit = () => {
   rerender(this.$el, prevNodes, this._vNodeCache);
   // handle watchers and lifecycle hooks
   this.onUpdate();
-  this.$watchers[k].call(this.$data);
+  this.$watchers[k](this.$data);
 };
 ```
 
