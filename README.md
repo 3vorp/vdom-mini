@@ -1,6 +1,25 @@
 <div align="center">
 	<h1>vDOM Mini</h1>
-	<i>Like an iPad Mini, but instead of a tablet, it's a 250-line virtual DOM implementation from scratch</i>
+	<a href="https://www.npmjs.com/package/vdom-mini" target="_blank">
+		<img
+			alt="npm"
+			src="https://img.shields.io/npm/v/vdom-mini?color=cb0000&logo=npm&style=flat-square"
+		>
+	</a>
+	<a href="https://github.com/3vorp/vdom-mini">
+		<img
+			alt="GitHub file size in bytes"
+			src="https://img.shields.io/github/size/3vorp/vdom-mini/index.js?color=43A047&label=Script%20size&logoColor=green&style=flat-square"
+		>
+	</a>
+	<a href="https://github.com/3vorp/vdom-mini/blob/main/CHANGELOG.md">
+		<img
+			alt="Changelog"
+			src="https://img.shields.io/badge/Changelog-Read_Here-blue?style=flat-square"
+		>
+	</a>
+	<br>
+	<i>Like an iPad Mini, but instead of a tablet, it's a 250-line virtual DOM implementation from scratch.</i>
 </div>
 
 ## Setup
@@ -26,7 +45,8 @@ const app = new VirtualDOM({
 		return h("h1", null, "Hello from the virtual DOM!");
 	},
 });
-// mount the app to the selector specified in the options object, or provide your own selector as the first parameter
+// mount the app to the selector specified in the options object
+// you can also provide a different selector as the first parameter
 app.mount();
 ```
 
@@ -45,14 +65,13 @@ const app = new VirtualDOM({
 		]);
 	},
 });
-// the el option can be specified here as well
-// (the function argument takes priority if both are specified)
+// the function argument takes priority if both are specified
 app.mount("#app");
 ```
 
 ## State
 
-You can add state to your app using a `state()` method, which will be run before the DOM is initialized. The first parameter will be a reactivity factory function, which by convention will be referred to as `$`.
+You can add state to your app using the `state()` method, which will be run before the DOM is initialized. The first parameter will be a reactivity factory function, which by convention will be referred to as `$`.
 
 ```js
 new VirtualDOM({
@@ -99,7 +118,7 @@ new VirtualDOM({
 				h(
 					"p",
 					null,
-					"Conditionally render children using the && operator, similarly to React",
+					"Conditionally render children using the && operator",
 				),
 		]);
 	},
@@ -177,7 +196,8 @@ new VirtualDOM({
 		// DOM methods like querySelector and getElementById are also available here
 	},
 	updated() {
-		// this runs after the DOM has been updated, so DOM methods will point to the latest version
+		// this runs after the DOM has been updated
+		// so DOM methods will point to the latest version
 	},
 });
 ```
