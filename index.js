@@ -20,8 +20,6 @@
 				return this._value;
 			},
 			set value(nv) {
-				// same object reference or same value, no need to emit
-				if (nv === this._value) return;
 				this._value = nv;
 				this._emit();
 			},
@@ -72,7 +70,7 @@
 		if (!rootNode) return;
 		if (typeof rootNode === "string") return rootNode;
 		const el = document.createElement(rootNode.tag);
-		Object.entries(rootNode.props).forEach(([k, v]) => {
+		Object.entries(rootNode.props || {}).forEach(([k, v]) => {
 			if (isEventName(k)) {
 				return el.addEventListener(getEventName(k), (ev) => {
 					v.call(ctx, ev);
@@ -102,8 +100,9 @@
 		if (typeof prev === "string" && typeof next === "string" && prev !== next)
 			return el.replaceWith(next);
 
-		// rerender whole tree (tag name is different)
-		if (prev.tag !== next.tag) return el.replaceWith(render(next, vdom.$data));
+		// rerender whole tree (tag or key name is different)
+		if (prev.tag !== next.tag || prev.props?.key !== next.props?.key)
+			return el.replaceWith(render(next, vdom.$data));
 
 		for (const [propName, propValue] of Object.entries(prev.props)) {
 			// prop doesn't exist in new object
@@ -135,6 +134,7 @@
 				.forEach((c) => c.remove());
 		}
 
+		// diff and rerender all children recursively
 		const proms = [];
 		for (let i = 0; i < el.childNodes.length; ++i) {
 			proms.push(rerender(el.childNodes[i], prev.children[i], next.children[i], vdom));
@@ -198,7 +198,7 @@
 			this.onUpdate = (updated || function () {}).bind(this.$data);
 		}
 		_setupData({ state, data, computed, methods, watch }) {
-			if (state) this.$data = state(reactive);
+			if (state) this.$data = state(reactive) || {};
 			else {
 				let rawData = data?.call(null) || {};
 				for (const k of Object.keys(rawData)) {
