@@ -110,7 +110,7 @@ new VirtualDOM({
       h(
         "button",
         {
-          onClick: () => updateTitle(),
+          onClick: () => this.updateTitle(),
         },
         "Click to update title",
       ),
