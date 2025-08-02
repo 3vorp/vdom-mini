@@ -204,7 +204,7 @@ new VirtualDOM({
 
 ## Reactivity Implementation
 
-Reactivity is implemented using ES5 getters and setters. When a value is set, it emits an internal signal that rerenders the result of the view function to the actual DOM, and calls any associated watchers once the DOM has been diffed against the previous view function result and reconcilliated with the actual DOM.
+Reactivity is implemented using ES5 getters and setters. When a value is set, it emits an internal signal that rerenders the result of the view function to the actual DOM, and calls any associated watchers once the DOM has been diffed against the previous view function result and reconciled with the actual DOM.
 
 The `$` function has two different operations depending on the type of the object passed as the parameter. If the parameter is a regular value, the function returns a reactive object with both a getter and setter for `value`. However, if the parameter itself is a function, the function returns a getter-only object that calls the parameter when accessed. Since the function is polymorphic and therefore the only necessary import to declare all state variables, it's passed in the `state` function call directly to save on code.
 
